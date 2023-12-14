@@ -2,13 +2,14 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+import { gql } from "@apollo/client";
 import * as APITypes from "../API";
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const createTodo = /* GraphQL */ `mutation CreateTodo(
+export const createTodo = /* GraphQL */ gql`mutation CreateTodo(
   $input: CreateTodoInput!
   $condition: ModelTodoConditionInput
 ) {
@@ -21,10 +22,9 @@ export const createTodo = /* GraphQL */ `mutation CreateTodo(
     __typename
   }
 }
-` as GeneratedMutation<
-  APITypes.CreateTodoMutationVariables,
-  APITypes.CreateTodoMutation
->;
+`;
+
+
 export const updateTodo = /* GraphQL */ `mutation UpdateTodo(
   $input: UpdateTodoInput!
   $condition: ModelTodoConditionInput

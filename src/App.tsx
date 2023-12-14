@@ -4,13 +4,13 @@ import { generateClient } from "aws-amplify/api";
 
 import { createTodo } from "./graphql/mutations";
 import { listTodos } from "./graphql/queries";
-import { type CreateTodoInput, type Todo, ListTodosQuery } from "./API";
+import { type CreateTodoInput, ListTodosQuery, CreateTodoMutation, CreateTodoMutationVariables } from "./API";
 
 import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import { type AuthUser } from "aws-amplify/auth";
 import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 import "@aws-amplify/ui-react/styles.css";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
 const initialState: CreateTodoInput = { name: "", description: "" };
 const client = generateClient();
@@ -22,8 +22,8 @@ type AppProps = {
 
 const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTodoInput>(initialState);
-  const [todos, setTodos] = useState<Todo[] | CreateTodoInput[]>([]);
   const { data, loading, error } = useQuery<ListTodosQuery>(listTodos);
+  const [addTodoMutation] = useMutation<CreateTodoMutation, CreateTodoMutationVariables>(createTodo);
   // const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
@@ -48,15 +48,15 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   async function addTodo() {
     try {
       if (!formState.name || !formState.description) return;
-      const todo = { ...formState };
-      setTodos([...todos, todo]);
-      setFormState(initialState);
-      await client.graphql({
-        query: createTodo,
+      console.log(formState);
+      
+      await addTodoMutation({
         variables: {
-          input: todo,
+          input: formState, 
         },
+        refetchQueries: [{query: listTodos}]
       });
+      setFormState(initialState);
     } catch (err) {
       console.log("error creating todo:", err);
     }
@@ -91,7 +91,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       ) : (
         <>
           {data?.listTodos?.items.map((todo, index) => (
-            <div key={todo?.id ? todo.id : index} style={styles.todo}>
+            <div key={index} style={styles.todo}>
               <p style={styles.todoName}>{todo?.name}</p>
               <p style={styles.todoDescription}>{todo?.description}</p>
             </div>
