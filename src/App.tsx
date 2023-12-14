@@ -4,12 +4,13 @@ import { generateClient } from "aws-amplify/api";
 
 import { createTodo } from "./graphql/mutations";
 import { listTodos } from "./graphql/queries";
-import { type CreateTodoInput, type Todo } from "./API";
+import { type CreateTodoInput, type Todo, ListTodosQuery } from "./API";
 
 import { withAuthenticator, Button, Heading } from "@aws-amplify/ui-react";
 import { type AuthUser } from "aws-amplify/auth";
 import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
 import "@aws-amplify/ui-react/styles.css";
+import { useQuery } from "@apollo/client";
 
 const initialState: CreateTodoInput = { name: "", description: "" };
 const client = generateClient();
@@ -22,26 +23,27 @@ type AppProps = {
 const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTodoInput>(initialState);
   const [todos, setTodos] = useState<Todo[] | CreateTodoInput[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { data, loading, error } = useQuery<ListTodosQuery>(listTodos);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
+  // useEffect(() => {
+ 
+  // }, [data]);
 
-  async function fetchTodos() {
-    setIsLoading(true);
-    try {
-      const todoData = await client.graphql({
-        query: listTodos,
-      });
-      const todos = todoData.data.listTodos.items;
-      setTodos(todos);
-    } catch (err) {
-      console.log("error fetching todos");
-    }
-    setIsLoading(false);
-  }
+  // async function fetchTodos() {
+  //   setIsLoading(true);
+  //   try {
+  //     const todoData = await client.graphql({
+  //       query: listTodos,
+  //     });
+  //     const todos = todoData.data.listTodos.items;
+  //     setTodos(todos);
+  //   } catch (err) {
+  //     console.log("error fetching todos");
+  //   }
+  //   setIsLoading(false);
+  // }
 
   async function addTodo() {
     try {
@@ -84,14 +86,14 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
       <button style={styles.button} onClick={addTodo}>
         Create Todo
       </button>
-      {isLoading ? (
+      {loading || error? (
       <p>Loading...</p>
       ) : (
         <>
-          {todos.map((todo, index) => (
-            <div key={todo.id ? todo.id : index} style={styles.todo}>
-              <p style={styles.todoName}>{todo.name}</p>
-              <p style={styles.todoDescription}>{todo.description}</p>
+          {data?.listTodos?.items.map((todo, index) => (
+            <div key={todo?.id ? todo.id : index} style={styles.todo}>
+              <p style={styles.todoName}>{todo?.name}</p>
+              <p style={styles.todoDescription}>{todo?.description}</p>
             </div>
           ))}
         </>

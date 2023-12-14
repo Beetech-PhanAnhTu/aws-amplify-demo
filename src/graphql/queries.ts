@@ -2,6 +2,7 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+import { gql } from "@apollo/client";
 import * as APITypes from "../API";
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
@@ -19,7 +20,8 @@ export const getTodo = /* GraphQL */ `query GetTodo($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetTodoQueryVariables, APITypes.GetTodoQuery>;
-export const listTodos = /* GraphQL */ `query ListTodos(
+
+export const listTodos = /* GraphQL */gql`query ListTodos(
   $filter: ModelTodoFilterInput
   $limit: Int
   $nextToken: String
@@ -37,4 +39,4 @@ export const listTodos = /* GraphQL */ `query ListTodos(
     __typename
   }
 }
-` as GeneratedQuery<APITypes.ListTodosQueryVariables, APITypes.ListTodosQuery>;
+`;
