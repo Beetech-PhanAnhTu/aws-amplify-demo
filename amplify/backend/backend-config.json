@@ -1,15 +1,23 @@
 {
   "api": {
     "reactamplified": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "reactamplifiede523aa22"
+        }
+      ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authreactamplifiede523aa22"
+            }
           }
         }
       },
@@ -43,6 +51,31 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "reactamplifiede466b774": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_reactamplifiede466b774_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "reactamplifiede466b774"
+        }
+      ]
+    },
+    "AMPLIFY_function_reactamplifiede466b774_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "reactamplifiede466b774"
+        }
+      ]
     }
   }
 }

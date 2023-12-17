@@ -17,6 +17,12 @@
       },
       "auth": {
         "reactamplifiede523aa22": {}
+      },
+      "function": {
+        "reactamplifiede466b774": {
+          "deploymentBucketName": "amplify-reactamplified-dev-224337-deployment",
+          "s3Key": "amplify-builds/reactamplifiede466b774-38426468306e596d6b77-build.zip"
+        }
       }
     }
   }
